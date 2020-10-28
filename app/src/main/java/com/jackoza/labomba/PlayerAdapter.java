@@ -45,15 +45,14 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
                 _holder.bombs.setText("x"+currentPlayer.getBomb());
             }
         });
-        holder.playerLayout.setOnLongClickListener(new View.OnLongClickListener() {
+       /*holder.playerLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (players.)
                 players.remove(_position);
                 notifyItemRemoved(_position);
                 return true;
             }
-        });
+        });*/
     }
 
     @Override
