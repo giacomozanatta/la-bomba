@@ -113,17 +113,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ruleText = findViewById(R.id.Rule);
-        wordText = findViewById(R.id.Word);
-        newGame = findViewById(R.id.NewGame);
-        exit = findViewById(R.id.Exit);
-        imageBomb = findViewById(R.id.imageBomb);
-        addPlayer = findViewById(R.id.AddPlayer);
-        addNewPlayerContainer = findViewById(R.id.AddNewPlayer);
-        addNewPlayerContainer.setVisibility(View.INVISIBLE);
-        savePlayer = findViewById(R.id.SavePlayer);
-        backButtonNewPlayer = findViewById(R.id.NewPlayerBackButton);
-        newPlayerName = findViewById(R.id.EditTextTextPersonName);
+        findViews();
         DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(imageBomb);
         Glide.with(this).load(R.raw.bomba).into(imageViewTarget);
 
@@ -138,10 +128,8 @@ public class MainActivity extends AppCompatActivity {
         newPlayerName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
@@ -173,20 +161,11 @@ public class MainActivity extends AppCompatActivity {
                 savePlayer.setVisibility(View.INVISIBLE);
                 // add new player to the list
                 players.add(new Player(newPlayerName.getText().toString()));
-                Log.v("CIAO", players.toString());
             }
         });
-        alarm01 = MediaPlayer.create(this, R.raw.alarm_01);
-        alarm01.setLooping(true);
-        alarm02 = MediaPlayer.create(this, R.raw.alarm_02);
-        alarm02.setLooping(true);
-        explosion = MediaPlayer.create(this, R.raw.explosion);
+        instantiateAudio();
+        shuffleWords();
         counter = 0;
-        List<String> wordsList = Arrays.asList(words);
-        Collections.shuffle(wordsList);
-        Collections.shuffle(wordsList);
-        Collections.shuffle(wordsList);
-        wordsList.toArray(words);
 
         explosion.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -207,13 +186,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Player list
-        playerListRecyclerView = findViewById(R.id.PlayerViewRecyclerList);
+
         rvLayoutManager = new LinearLayoutManager(this);
         playerListRecyclerView.setHasFixedSize(false);
         rvAdapter = new PlayerAdapter(players);
         playerListRecyclerView.setLayoutManager(rvLayoutManager);
         playerListRecyclerView.setAdapter(rvAdapter);
-        playerListContainer = findViewById(R.id.PlayerListContainer);
+
     }
 
     private void newGame() {
@@ -225,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         exit.setVisibility(View.VISIBLE);
         wordText.setText(words[(counter+1)%words.length]);
         counter++;
-        countdown1 = new CountDownTimer(rn.nextInt ((40000 - 10000 + 1)) + 10000, 1000) {
+        countdown1 = new CountDownTimer(rn.nextInt ((60000 - 10000 + 1)) + 10000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) { }
 
@@ -272,5 +251,37 @@ public class MainActivity extends AppCompatActivity {
         explosion.seekTo(0);
         newGame.setVisibility(View.VISIBLE);
         exit.setVisibility(View.INVISIBLE);
+    }
+
+    private void findViews() {
+        ruleText = findViewById(R.id.Rule);
+        wordText = findViewById(R.id.Word);
+        newGame = findViewById(R.id.NewGame);
+        exit = findViewById(R.id.Exit);
+        imageBomb = findViewById(R.id.imageBomb);
+        addPlayer = findViewById(R.id.AddPlayer);
+        addNewPlayerContainer = findViewById(R.id.AddNewPlayer);
+        addNewPlayerContainer.setVisibility(View.INVISIBLE);
+        savePlayer = findViewById(R.id.SavePlayer);
+        backButtonNewPlayer = findViewById(R.id.NewPlayerBackButton);
+        newPlayerName = findViewById(R.id.EditTextTextPersonName);
+        playerListRecyclerView = findViewById(R.id.PlayerViewRecyclerList);
+        playerListContainer = findViewById(R.id.PlayerListContainer);
+    }
+
+    private void instantiateAudio() {
+        alarm01 = MediaPlayer.create(this, R.raw.alarm_01);
+        alarm01.setLooping(true);
+        alarm02 = MediaPlayer.create(this, R.raw.alarm_02);
+        alarm02.setLooping(true);
+        explosion = MediaPlayer.create(this, R.raw.explosion);
+    }
+
+    private void shuffleWords() {
+        List<String> wordsList = Arrays.asList(words);
+        Collections.shuffle(wordsList);
+        Collections.shuffle(wordsList);
+        Collections.shuffle(wordsList);
+        wordsList.toArray(words);
     }
 }
